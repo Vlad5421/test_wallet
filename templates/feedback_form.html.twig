@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <h1>Форма обратной связи.</h1>
+    <form id="feedForm" method="post">
+        <div id="sendMessaje" style="display: none"></div>
+        <label for="userName">Ваше имя:</label><br>
+        <input type="text" name="userName" maxlength="80"><br>
+
+        <label for="userEmail">Ваш email:</label><br>
+        <input type="email" name="userEmail"><br>
+
+        <label for="userPassword">Ваш пароль:</label><br>
+        <input type="password" name="userPassword"><br>
+
+        <label for="message">Введите ваш комментарий:</label><br>
+        <textarea name="message" cols="25" rows="10"></textarea><br><br>
+
+        <span>Укажите сумму чисел {{ capcha1 }} и {{ capcha2 }}</span><br><br>
+        <input id="feedCapcha" type="number" name="capcha"><br><br>
+
+        <button id="fedSub">Отправить</button>
+    </form>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ parent() }}
+
+    <script>
+
+        const feedForm = document.querySelector('#feedForm');
+        const subButton = document.querySelector('#fedSub');
+        const messageCont = document.querySelector('#sendMessaje');
+
+
+        const capchaCheck = () => {
+            let feedCapcha = document.querySelector('#feedCapcha').value;
+            return fetch(`/services/chack-capcha/${feedCapcha}`,{
+                method: 'POST',
+            })
+                .then(data => data.json())
+                .then(data => data === 1 ? sendForm() : alert('Не верный ответ в проверке'));
+        }
+
+        const sendForm = ()=> {
+            fetch('/services/feedback/send', {
+                method: 'POST',
+                body: new FormData(feedForm)
+            })
+                .then((response) => {
+                return response.json();
+                })
+                .then((data) => {
+                    messageCont.style.display = 'block';
+                    messageCont.style.padding = '8px';
+                    messageCont.innerHTML = `<span> ${data} </span>`;
+                });
+
+        }
+
+        subButton.addEventListener('click', (ev) => {
+            ev.preventDefault();
+            capchaCheck();
+        });
+
+    </script>
+
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+
