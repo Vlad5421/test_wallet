@@ -13,6 +13,7 @@ class AddEmailsController extends AbstractController
     /**
      * @Route("/admin/add/users/{name}", name="admin_add_users")
      */
+    // написал, что бы проще создавать пользователей в БД
     public function index(EntityManagerInterface $em, $name): Response
     {
         $user = new User();
