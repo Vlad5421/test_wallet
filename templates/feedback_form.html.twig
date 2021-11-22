@@ -1,8 +1,20 @@
 {% extends 'base.html.twig' %}
+{% block styles %}
+    {{ parent() }}
+    <style>
+        #sendMessaje{
+            display: none;
+            word-wrap: wrap;
+            border: 1px solid red;
+            border-radius: 5px;
+            background-color: coral;
+        }
+    </style>
+{%  endblock %}
 {% block body %}
     <h1>Форма обратной связи.</h1>
     <form id="feedForm" method="post">
-        <div id="sendMessaje" style="display: none"></div>
+        <div id="sendMessaje"></div>
         <label for="userName">Ваше имя:</label><br>
         <input type="text" name="userName" maxlength="80"><br>
 
