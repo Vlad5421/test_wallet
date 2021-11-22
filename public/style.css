@@ -1,0 +1,18 @@
+.message_wrapper{
+    display: flex;
+    width: 800px;
+    justify-content: space-between;
+    align-content: start;
+
+}
+.message_cell{
+    min-width: 195px;
+    max-width: 195px;
+    display: block;
+    padding: 2em;
+
+}
+hr{
+    size: 1px;
+    color: gray;
+}

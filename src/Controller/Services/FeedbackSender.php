@@ -9,7 +9,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -68,7 +67,7 @@ class FeedbackSender extends AbstractController
     }
 
     /**
-     * @Route("/services/feedback/send")
+     * @Route("/services/feedback/send", methods={"POST"})
      */
     public function index( Request $request, EntityManagerInterface $em, MailerInterface $mailer){
         $valid_form = $this->setVars($request);
@@ -93,14 +92,14 @@ class FeedbackSender extends AbstractController
 
         // Если норм -> отправить сообщение в таблицу feedback
         //(отметка о запросе отправлена при проверке тайм-лага)
-        $this->sendFeed($em,$this->user_name, $this->user_email, $this->user_message);
+        $this->sendFeed($em);
 
         $subject = "Отправлено сообщение обратной связи от $this->user_name";
-        $body = "<b>Сообщение</b><br>$this->user_message";
+        $body = "Сообщение: $this->user_message";
 
         $sent_mail = new MailSenderController();
         $send_user = $sent_mail->sendMail($this->user_email, $subject, $body, $mailer);
-        $send_info = $sent_mail->sendMail('info@awardwallet.com', $subject, $body, $mailer);
+        $send_info = $sent_mail->sendMail('info@awardwallet.com', $subject, $body, $mailer, $this->user_email);
 
         return new Response(json_encode(['Ваше сообщение отправлено.']));
 
@@ -134,6 +133,7 @@ class FeedbackSender extends AbstractController
         $time_lug = (!$last_req || count($last_req) < 2) ? 61 : time() - $last_req[1]->getCreatedTime();
         return $time_lug < $time_segment;
     }
+
     // метод отправляет отметку об очередном запросе в бд
     protected function sendCheck($em, $user_email,$user_ip){
         $check = new  CheckReques();
@@ -148,8 +148,9 @@ class FeedbackSender extends AbstractController
             return new Response(json_encode(['Ошибка записи']));
         }
     }
+
     // Отправляет сообщение обратной связи в БД
-    protected function sendFeed($em, $user_name, $user_email, $user_message){
+    protected function sendFeed($em){
         $feed = new  Feedback();
         $feed
             ->setUserName($this->user_name)

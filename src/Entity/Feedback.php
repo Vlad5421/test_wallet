@@ -20,12 +20,12 @@ class Feedback
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $user_name;
+    private $userName;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $user_email;
+    private $userEmail;
 
     /**
      * @ORM\Column(type="text")
@@ -44,24 +44,24 @@ class Feedback
 
     public function getUserName(): ?string
     {
-        return $this->user_name;
+        return $this->userName;
     }
 
-    public function setUserName(?string $user_name): self
+    public function setUserName(?string $userName): self
     {
-        $this->user_name = $user_name;
+        $this->userName = $userName;
 
         return $this;
     }
 
     public function getUserEmail(): ?string
     {
-        return $this->user_email;
+        return $this->userEmail;
     }
 
-    public function setUserEmail(string $user_email): self
+    public function setUserEmail(string $userEmail): self
     {
-        $this->user_email = $user_email;
+        $this->userEmail = $userEmail;
 
         return $this;
     }

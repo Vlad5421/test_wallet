@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Все сообщения{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+{%  endblock %}
+
+{% block body %}
+    <h1>Страница всех сообщений от пользователя с Email: {{ userEmail }}</h1>
+    <div class="message_wrapper">
+        <div class="message_cell">Имя</div>
+        <div class="message_cell">Email</div>
+        <div class="message_cell">Сообщение</div>
+        <div class="message_cell">Дата записи</div>
+    </div>
+    <hr>
+    {% for message in messages %}
+        <div class="message_wrapper">
+            <div class="message_cell">{{ message.userName }}</div>
+            <div class="message_cell">{{ message.userEmail }}</div>
+            <div class="message_cell">{{ message.message }}</div>
+            <div class="message_cell">{{ message.createdTime | date('d.m.Y') }}</div>
+        </div>
+        <hr>
+    {% endfor %}
+
+
+{% endblock %}
+
+

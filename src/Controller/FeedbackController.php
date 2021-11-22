@@ -17,8 +17,6 @@ class FeedbackController extends AbstractController
     {
         $capcha = new CapchaService();
         $cap_vars = $capcha->makeCapcha();
-//        var_dump($cap_vars);
-//        die();
 
         return $this->render('feedback_form.html.twig', [
             'capcha1' => $cap_vars['capcha1'],

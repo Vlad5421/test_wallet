@@ -32,7 +32,6 @@
         const subButton = document.querySelector('#fedSub');
         const messageCont = document.querySelector('#sendMessaje');
 
-
         const capchaCheck = () => {
             let feedCapcha = document.querySelector('#feedCapcha').value;
             return fetch(`/services/chack-capcha/${feedCapcha}`,{

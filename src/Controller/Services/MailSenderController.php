@@ -2,27 +2,30 @@
 
 namespace App\Controller\Services;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
-class MailSenderController extends AbstractController
+class MailSenderController
 {
 
-    public function sendMail($to, $subject, $body, $mailer)
+    public function sendMail($to, $subject, $body, $mailer, string $sending_user = '')
     {
         $result = true;
+        $context = [];
 
+        if ($sending_user !== ''){
+            $context['userEmail'] = $sending_user;
+            $body = "$body. Все сообщения пользователя: ";
+        }
+        $context = array_merge($context, ['body' => $body, 'subject' => $subject]);
         $to = 'vladislav_ts@bk.ru'; // для проверки работоспособности зафиксировал почту
-        $email = new Email();
+        $email = new TemplatedEmail();
         $email
             ->from('vladislav_ts@list.ru')
             ->to($to)
             ->subject($subject)
-            ->html($body);
-//        $mailer = new MailerInterface();
+            ->htmlTemplate('mail_template.html.twig')
+            ->context($context);
+
         try {
             $mailer->send($email);
         } catch (\Exception $ex) {
