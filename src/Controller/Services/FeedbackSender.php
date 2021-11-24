@@ -101,7 +101,9 @@ class FeedbackSender extends AbstractController
         $send_user = $sent_mail->sendMail($this->user_email, $subject, $body, $mailer);
         $send_info = $sent_mail->sendMail('info@awardwallet.com', $subject, $body, $mailer, $this->user_email);
 
-        return new Response(json_encode(['Ваше сообщение отправлено.']));
+
+
+        return new Response(json_encode(['Ваше сообщение отправлено.']), 204);
 
     }
 
